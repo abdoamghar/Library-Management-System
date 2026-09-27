@@ -1,0 +1,12 @@
+<% if (errors.length) { %>
+<div class="flash error" role="alert">
+  <div>
+    <strong>Please check the form.</strong>
+    <ul>
+      <% errors.forEach(error => { %>
+      <li><%= error %></li>
+      <% }); %>
+    </ul>
+  </div>
+</div>
+<% } %>

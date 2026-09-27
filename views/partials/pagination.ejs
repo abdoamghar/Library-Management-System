@@ -1,0 +1,20 @@
+<% if (paging.count > 0) { %>
+<nav class="pagination" aria-label="Pagination">
+  <span>Showing
+    <%= (paging.page - 1) * 6 + 1 %>–<%= Math.min(paging.page * 6, paging.count) %>
+    of
+    <%= paging.count %></span>
+  <div>
+    <% if (paging.page > 1) { %><a class="button button-light button-small"
+      href="?page=<%= paging.page - 1 %>&q=<%= encodeURIComponent(search) %>"
+      aria-label="Previous page">← Previous</a><% } %>
+    <span>Page
+      <%= paging.page %>
+      of
+      <%= paging.pages %></span>
+    <% if (paging.page < paging.pages) { %><a class="button button-light button-small"
+      href="?page=<%= paging.page + 1 %>&q=<%= encodeURIComponent(search) %>"
+      aria-label="Next page">Next →</a><% } %>
+  </div>
+</nav>
+<% } %>

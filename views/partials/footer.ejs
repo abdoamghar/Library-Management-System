@@ -1,0 +1,22 @@
+</main>
+<footer class="site-footer">
+  <span>Chapter House</span>
+  <span>A place for stories. A space for
+    everyone.</span>
+  <span>Library management · <%= new Date().getFullYear() %></span>
+</footer>
+<dialog id="delete-dialog">
+  <form method="dialog">
+    <span class="eyebrow">PLEASE CONFIRM</span>
+    <h2>Delete this record?</h2>
+    <p id="delete-message"></p>
+    <div class="form-actions">
+      <button class="button button-light" value="cancel">Keep
+        record</button>
+      <button class="button button-danger" id="confirm-delete" value="delete">Delete record</button>
+    </div>
+  </form>
+</dialog>
+</body>
+
+</html>

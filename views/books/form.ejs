@@ -1,0 +1,78 @@
+<%- include('../partials/header') %>
+<a class="text-link" href="/books">← Back to collection</a>
+<div class="page-heading">
+  <div>
+    <span class="eyebrow">BUILD THE COLLECTION</span>
+    <h1><%= title %><span class="heading-dot">.</span></h1>
+    <p>A few details today. Countless stories tomorrow.</p>
+  </div>
+</div>
+<div class="form-layout">
+  <form class="panel library-form" method="post"
+    action="/books<%= book._id ? '/' + book._id : '' %>">
+    <input type="hidden" name="_csrf" value="<%= csrf %>"><%- include('../partials/errors') %>
+    <label for="title">Book title <span>*</span>
+    </label>
+    <input id="title" name="title" value="<%= book.title || '' %>" required maxlength="160"
+      autofocus>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div>
+        <label for="isbn">ISBN (13 digits) <span>*</span>
+        </label>
+        <input id="isbn" name="isbn" value="<%= book.isbn || '' %>" required pattern="[0-9]{13}"
+          maxlength="13" inputmode="numeric">
+        <small>Enter digits only, without hyphens.</small>
+      </div>
+      <div>
+        <label for="publicationYear">Publication year <span>*</span>
+        </label>
+        <input id="publicationYear" name="publicationYear" type="number" min="1450"
+          max="<%= new Date().getFullYear() + 1 %>"
+          value="<%= Number.isFinite(book.publicationYear) ? book.publicationYear : '' %>" required>
+      </div>
+    </div>
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="4" maxlength="2000"><%= book.description || '' %></textarea>
+    <label for="totalCopies">Number of copies <span>*</span>
+    </label>
+    <input id="totalCopies" name="totalCopies" type="number" min="1" max="1000" step="1" required
+      value="<%= Number.isFinite(book.totalCopies) ? book.totalCopies : 1 %>">
+    <fieldset>
+      <legend>Authors</legend>
+      <p class="field-hint">Select all authors who contributed to this book.</p>
+      <div class="checkbox-grid"><% authors.forEach(author => { %><label class="checkbox-label">
+          <input type="checkbox" name="authors" value="<%= author._id %>"
+            <%= selectedAuthors.includes(String(author._id)) ? 'checked' : '' %>>
+          <span><%= author.name %></span>
+        </label><% }); %>
+      </div>
+      <a class="text-link" href="/authors/new">Add an author ↗</a>
+    </fieldset>
+    <fieldset>
+      <legend>Categories</legend>
+      <p class="field-hint">A book can belong on more than one shelf.</p>
+      <div class="checkbox-grid"><% categories.forEach(category => { %><label
+          class="checkbox-label">
+          <input type="checkbox" name="categories" value="<%= category._id %>"
+            <%= selectedCategories.includes(String(category._id)) ? 'checked' : '' %>>
+          <span><%= category.name %></span>
+        </label><% }); %>
+      </div>
+      <a class="text-link" href="/categories/new">Add a category ↗</a>
+    </fieldset>
+    <div class="form-actions">
+      <button class="button" type="submit"><%= book._id ? 'Save changes' : 'Add to collection' %>
+      </button>
+      <a class="button button-light" href="/books">Cancel</a>
+    </div>
+  </form>
+  <aside class="form-note">
+    <span class="eyebrow">A NOTE FROM THE DESK</span>
+    <h2>Good details.
+      <br>Great discoveries.
+    </h2>
+    <p>Accurate titles and author names help readers find their next favourite.</p>
+    <p>Fields marked * are required. You can add or change authors and categories later.</p>
+  </aside>
+</div>
+<%- include('../partials/footer') %>

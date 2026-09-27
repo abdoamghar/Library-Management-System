@@ -1,0 +1,39 @@
+<%- include('../partials/header') %><a class="text-link" href="/loans">← Back to borrowing desk</a>
+<div class="page-heading">
+  <div>
+    <span class="eyebrow">THE NEXT CHAPTER</span>
+    <h1>Lend a book<span class="heading-dot">.</span></h1>
+    <p>Pair a story with its next reader.</p>
+  </div>
+</div>
+<form class="panel library-form narrow-form" method="post" action="/loans">
+  <input type="hidden" name="_csrf" value="<%= csrf %>"><%- include('../partials/errors') %><label
+    for="book">Book
+    <span>*</span>
+  </label>
+  <select id="book" name="book" required>
+    <option value="">Choose an available book</option><% books.forEach(book => { %><option
+      value="<%= book._id %>" <%= String(values.book) === String(book._id) ? 'selected' : '' %>>
+      <%= book.title %> (<%= book.availableCopies %> available)</option><% }); %>
+  </select><% if (!books.length) { %><p class="field-hint">No copies are available. Return a book or
+    add copies to the collection.</p><% } %><label for="borrowerName">Reader's name
+    <span>*</span>
+  </label>
+  <input id="borrowerName" name="borrowerName" required maxlength="100"
+    value="<%= values.borrowerName || '' %>">
+  <label for="borrowerEmail">Reader's email
+    <span>*</span>
+  </label>
+  <input id="borrowerEmail" name="borrowerEmail" type="email" required maxlength="254"
+    value="<%= values.borrowerEmail || '' %>">
+  <label for="dueAt">Due date
+    <span>*</span>
+  </label>
+  <input id="dueAt" name="dueAt" type="date" required
+    min="<%= new Date().toISOString().slice(0, 10) %>"
+    value="<%= values.dueAt || new Date(Date.now() + 14 * 86400000).toISOString().slice(0, 10) %>">
+  <div class="form-actions">
+    <button class="button" type="submit" <%= !books.length ? 'disabled' : '' %>>Record loan</button>
+    <a class="button button-light" href="/loans">Cancel</a>
+  </div>
+</form><%- include('../partials/footer') %>

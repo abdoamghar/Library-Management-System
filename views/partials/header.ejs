@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+      content="Chapter House — a thoughtful home for your library collection.">
+    <title><%= title %> · Chapter House</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/app.js" defer></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="nav-wrap">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true">CH</span>
+          <span>
+            Chapter House
+            <small>YOUR NEIGHBOURHOOD LIBRARY</small>
+          </span>
+        </a>
+
+        <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">
+          Menu <span aria-hidden="true">☰</span>
+        </button>
+
+        <nav id="main-nav" aria-label="Main navigation">
+          <% for (const link of navigation) { %>
+          <a href="<%= link.url %>" class="<%= link.active ? 'active' : '' %>">
+            <%= link.label %>
+          </a>
+          <% } %>
+        </nav>
+
+        <a class="button button-small" href="/books/new">+ Add book</a>
+      </div>
+
+      <div class="search-wrap">
+        <span>A good book belongs in good hands.</span>
+
+        <form action="<%= searchPage.url %>" method="get" role="search">
+          <label class="sr-only" for="nav-search">Search <%= searchPage.label %></label>
+          <input id="nav-search" name="q" maxlength="100" value="<%= search %>"
+            placeholder="Search <%= searchPage.placeholder %>…">
+          <button type="submit">Search ↗</button>
+        </form>
+      </div>
+    </header>
+
+    <main id="main" class="max-w-7xl mx-auto px-5 sm:px-8 py-10">
+      <% if (flash) { %>
+      <div class="flash <%= flash.type %>" role="status">
+        <span><%= flash.message %></span>
+        <button type="button" class="dismiss-flash" aria-label="Dismiss message">×</button>
+      </div>
+      <% } %>

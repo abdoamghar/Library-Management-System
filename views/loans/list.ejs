@@ -1,0 +1,70 @@
+<%- include('../partials/header') %>
+<div class="page-heading">
+  <div>
+    <span class="eyebrow">KEEP THE STORIES MOVING</span>
+    <h1>Borrowing desk<span class="heading-dot">.</span></h1>
+    <p>
+      <%= search ? `Results for “${search}”` : 'From your shelves to their hands, and back again.' %>
+    </p>
+  </div>
+  <a class="button" href="/loans/new">+ Lend a book</a>
+</div>
+<div class="list-toolbar">
+  <span>
+    <strong><%= paging.count %></strong> borrowing records
+  </span><% if (search) { %><a class="text-link" href="/loans">Clear search ×</a><% } %>
+</div>
+<section class="panel">
+  <% if (!loans.length) { %>
+  <div class="empty-state">
+    <h2>No loans found</h2>
+    <p>
+      <%= search ? 'Try another title or borrower name.' : 'Record a loan when a reader borrows a book.' %>
+    </p>
+  </div>
+  <% } else { %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Book & reader</th>
+          <th>Borrowed</th>
+          <th>Due date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% loans.forEach(loan => { const overdue = !loan.returnedAt && loan.dueAt < new Date(); %>
+        <tr>
+          <td>
+            <a class="table-title" href="/books/<%= loan.book?._id %>">
+              <%= loan.book?.title || 'Removed book' %></a>
+            <small><%= loan.borrowerName %>
+              ·
+              <%= loan.borrowerEmail %></small>
+          </td>
+          <td><%= loan.borrowedAt.toLocaleDateString('en-GB') %></td>
+          <td><%= loan.dueAt.toLocaleDateString('en-GB') %></td>
+          <td>
+            <span class="badge <%= overdue ? 'badge-warm' : '' %>">
+              <%= loan.returnedAt ? 'Returned' : overdue ? 'Overdue' : 'On loan' %></span>
+          </td>
+          <td>
+            <% if (!loan.returnedAt) { %>
+            <form method="post" action="/loans/<%= loan._id %>/return">
+              <input type="hidden" name="_csrf" value="<%= csrf %>" />
+              <button class="button button-light button-small" type="submit">
+                Return book
+              </button>
+            </form>
+            <% } else { %><small><%= loan.returnedAt.toLocaleDateString('en-GB') %></small><% } %>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <% } %>
+</section>
+<%- include('../partials/pagination') %><%- include('../partials/footer') %>
